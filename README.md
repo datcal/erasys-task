@@ -1,73 +1,82 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Erasys Task
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Steps
+------
+- [Set up](#set-up)
+- [Configuring Database](#configuring-database)
+- [Running The Test](#running-the-test)
+- [Validate Passwords](#validate-passwords)
+- [Check Compromised Passwords](#check-compromised-passwords)
+- [Validate and check Compromised Passwords](#validate-and-check-compromised-passwords)
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+Set up
+------
+First, build docker container and run:
 
 ```bash
-$ npm install
+docker-compose build
+docker-compose up -d
 ```
 
-## Running the app
+Configuring Database
+------
+You can set database configurations, use the following values in .env which lives root directory.
+
+```
+DATABASE_CLIENT=mysql
+DATABASE_HOST=erasys-db
+DATABASE_USER=testDbUser
+DATABASE_PASSWORD=PRYjQRlcSIBMORtp
+DATABASE_NAME=testDb
+DATABASE_PORT=3306
+```
+
+
+Running The Test
+------
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+- npm run test:e2e
+- npm test
 ```
 
-## Test
-
+Validate Passwords
+------
+Check password via password validation api and update valid field on database and print all passwords to console output.
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+- docker exec -it erasys-api npm run execute cp
 ```
 
-## Support
+Check Compromised Passwords
+------
+Check passwords via erasys compromised api and print all compromised password to console output.
+```bash
+- docker exec -it erasys-api npm run execute cpc
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Validate and check Compromised Passwords
+------
+Check passwords via password validation api and erasys compromised api and update valid field on database and print all passwords to console output.
+```bash
+- docker exec -it erasys-api npm run execute fpc
+```
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Password Validation API
 
-## License
+- Password validation API = http://localhost:3000
 
-Nest is [MIT licensed](LICENSE).
+| Route | HTTP	 | Body	 |Header	 | Description	 |
+| --- | --- | --- | --- | --- |
+| /passwords | `POST` | {'password':'csds2'} |  | Validation for password. |
+
+
+# Password Compromised API
+
+- Password Compromised API = http://localhost:5001
+
+| Route | HTTP	 | Body	 |Header	 | Description	 |
+| --- | --- | --- | --- | --- |
+| /compromised | `GET` | {'password':'%23nxzr1Bp'} |  | Compromised password control. |
