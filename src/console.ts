@@ -11,23 +11,20 @@ async function bootstrap() {
         : ['error', 'warn'],
   });
   const command = process.argv[2];
+  const cliHelperService: CliHelperService = app
+    .select(CliHelperModule)
+    .get(CliHelperService);
 
   switch (command) {
     case 'check-passwords':
-      const cliHelperService: CliHelperService = app
-        .select(CliHelperModule)
-        .get(CliHelperService);
-
-      await cliHelperService.check();
+      await cliHelperService.checkValidation();
       break;
     case 'check-passwords-compromised':
-      /* Const compromisedPasswordService: CompromisedPasswordService = application
-        .select(CompromisedPasswordModule)
-        .get(CompromisedPasswordService);
-
-      const checkPasswordCompromisedResult =
-        await compromisedPasswordService.checkCompromised('#nxzr1Bp');
-      console.log(checkPasswordCompromisedResult); */
+      await cliHelperService.checkCompromised();
+      break;
+    case 'full-check-passwords':
+      await cliHelperService.checkValidationAndCompromised();
+      break;
       break;
     default:
       console.log('Command not found');

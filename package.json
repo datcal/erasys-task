@@ -9,6 +9,7 @@
     "execute": "ts-node ./dist/src/console.js",
     "cp": "ts-node ./dist/src/console.js check-passwords",
     "cpc": "ts-node ./dist/src/console.js check-passwords-compromised",
+    "fcp": "ts-node ./dist/src/console.js full-check-passwords",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import validation from 'config/validation';
-import configuration from 'config/configuration';
+import validation from './../config/validation';
+import configuration from './../config/configuration';
 import { CliHelperModule } from './cli-helper/cli-helper.module';
 import { PasswordModule } from './password/password.module';
 
@@ -25,6 +25,7 @@ import { PasswordModule } from './password/password.module';
     ConfigModule.forRoot({
       load: [validation, configuration],
       isGlobal: true,
+      cache: false,
     }),
     PasswordModule,
     CliHelperModule,

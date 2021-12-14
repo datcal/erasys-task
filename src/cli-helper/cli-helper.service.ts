@@ -20,7 +20,7 @@ export class CliHelperService {
   }
 
   /* Check if the password is valid */
-  async check() {
+  async checkValidation() {
     const validPasswords = [];
     const inValidPasswords = [];
     const passwords = await this.getPasswords();
@@ -34,6 +34,7 @@ export class CliHelperService {
         this.log(p.password, message);
         inValidPasswords.push(p.password);
       } else {
+        this.log(p.password, ['password is valid']);
         validPasswords.push(p.password);
       }
     });
@@ -53,6 +54,53 @@ export class CliHelperService {
       .execute();
   }
 
+  /* Check if the password is valid */
+  async checkCompromised() {
+    const passwords = await this.getPasswords();
+
+    this.log('Checking passwords...');
+    const promises = passwords.map(async (p) => {
+      const [status, message] = await this.checkFromPasswordCompromisedApi(
+        p.password,
+      );
+      if (status === 0) {
+        this.log(p.password, message);
+      }
+    });
+    await Promise.all(promises);
+  }
+
+  /* Check if the password is valid */
+  async checkValidationAndCompromised() {
+    const validPasswords = [];
+    const inValidPasswords = [];
+    const passwords = await this.getPasswords();
+
+    this.log('Checking passwords...');
+    const promises = passwords.map(async (p) => {
+      const [statusValidation, messageValidation] =
+        await this.checkFromPasswordValidationApi(p.password);
+
+      const [statusCompromise, messageCompromise] =
+        await this.checkFromPasswordCompromisedApi(p.password);
+
+      if (statusValidation === 0 || statusCompromise === 0) {
+        let message = [...messageValidation, messageCompromise];
+        message = message.filter(function (e) {
+          return e !== '';
+        });
+        this.log(p.password, message);
+        inValidPasswords.push(p.password);
+      } else {
+        validPasswords.push(p.password);
+      }
+    });
+
+    await Promise.all(promises);
+    await this.updatePassword(validPasswords, 1);
+    await this.updatePassword(inValidPasswords, 0);
+  }
+
   /* Get password validation status from the password validation api */
   async checkFromPasswordValidationApi(password: string) {
     const url = this.configService.get('api.validation');
@@ -64,15 +112,22 @@ export class CliHelperService {
     }
   }
 
-  /* Get password compromise status from the password compromise api */
+  /* Get password compromise status from the erasys password compromise api */
   async checkFromPasswordCompromisedApi(password: string) {
     const url =
       this.configService.get('api.compromised') +
       '?password=' +
       encodeURIComponent(password);
 
-    const api = await axios.get(url);
-    return [api.status === 200 ? 0 : 1, api.data.message || ''];
+    try {
+      const api = await axios.get(url);
+      return [
+        api.status === 204 ? 1 : 0,
+        api.status === 200 ? api.data.message : '',
+      ];
+    } catch (error) {
+      return [0, error.response.data];
+    }
   }
 
   log(...log: any) {
