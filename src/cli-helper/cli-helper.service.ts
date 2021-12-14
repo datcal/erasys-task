@@ -1,25 +1,25 @@
-import { Password } from './password.entity';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getConnection, In } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import axios from 'axios';
+import { Password } from './password.entity';
 
 @Injectable()
 export class CliHelperService {
   constructor(
     @InjectRepository(Password)
-    private passwordsRepository: Repository<Password>,
-    private configService: ConfigService,
+    private readonly passwordsRepository: Repository<Password>,
+    private readonly configService: ConfigService,
   ) {}
 
-  /* get all passwords from the database */
+  /* Get all passwords from the database */
   async getPasswords(): Promise<Password[]> {
     return this.passwordsRepository.find();
   }
 
-  /* check if the password is valid */
+  /* Check if the password is valid */
   async check() {
     const validPasswords = [];
     const inValidPasswords = [];
@@ -43,28 +43,28 @@ export class CliHelperService {
     await this.updatePassword(inValidPasswords, 0);
   }
 
-  /* update password status */
+  /* Update password status */
   async updatePassword(passwords, valid) {
     await getConnection()
       .createQueryBuilder()
       .update(Password)
-      .set({ valid: valid })
+      .set({ valid })
       .where({ password: In(passwords) })
       .execute();
   }
 
-  /* get password validation status from the password validation api */
+  /* Get password validation status from the password validation api */
   async checkFromPasswordValidationApi(password: string) {
     const url = this.configService.get('api.validation');
     try {
-      const api = await axios.post(url, { password: password });
+      const api = await axios.post(url, { password });
       return [api.status === 204 ? 1 : 0, api.data.message || ''];
-    } catch (e) {
-      return [0, e.response.data];
+    } catch (error) {
+      return [0, error.response.data];
     }
   }
 
-  /* get password compromise status from the password compromise api */
+  /* Get password compromise status from the password compromise api */
   async checkFromPasswordCompromisedApi(password: string) {
     const url =
       this.configService.get('api.compromised') +

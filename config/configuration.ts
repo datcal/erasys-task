@@ -5,7 +5,7 @@ export default () => ({
     name: process.env.DATABASE_NAME,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
-    port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
+    port: Number.parseInt(process.env.DATABASE_PORT, 10) || 3306,
   },
   api: {
     validation: process.env.VALIDATION_API,
@@ -14,6 +14,6 @@ export default () => ({
   app: {
     debug: process.env.APP_DEBUG || false,
     logType: process.env.APP_LOG_TYPE || 'logger',
-    port: parseInt(process.env.PORT, 10) || 3000,
+    port: Number.parseInt(process.env.PORT, 10) || 3000,
   },
 });

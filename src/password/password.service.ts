@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -6,7 +6,7 @@ export class PasswordService {
   pattern = [];
   match = [];
   message = [];
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.loadValidations();
   }
 
@@ -14,7 +14,7 @@ export class PasswordService {
     this.pattern = this.configService.get('pattern');
     this.match = this.configService.get('match');
     this.message = this.configService.get('message');
-    //Logger.log(this.pattern);
+    // Logger.log(this.pattern);
   }
 
   check(password: string) {
@@ -27,7 +27,7 @@ export class PasswordService {
     const errors = [];
     this.pattern.forEach((pattern: RegExp, index) => {
       const regex = new RegExp(pattern);
-      if (regex.test(s) == this.match[index]) {
+      if (regex.test(s) === this.match[index]) {
         errors.push(this.message[index]);
       }
     });

@@ -1,0 +1,26 @@
+{
+  "space": true,
+  "rules": {
+    "@typescript-eslint/no-floating-promises": 0,
+    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-unsafe-return": 0,
+    "@typescript-eslint/no-unsafe-call": 0,
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/space-after-keywords": 0,
+    "@typescript-eslint/object-curly-spacing": 0,
+    "node/prefer-global/process": 0,
+    "unicorn/no-process-exit": 0,
+    "new-cap": 0,
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never"
+      }
+    ]
+  }
+}
