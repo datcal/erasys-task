@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+  api:
+    container_name: erasys-api
+    build:
+      dockerfile: docker/Dockerfile
+      context: ./
+    working_dir: /usr/src/app
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT}
+    command: npm run start:dev
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file: .env
+    networks:
+      - erasys-app-network
+  db:
+    #image: mysql:8.0.19
+    image: mariadb:10
+    container_name: erasys-db
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    environment:
+      MYSQL_DATABASE: '${DATABASE_NAME}'
+      MYSQL_ROOT_PASSWORD: '${DATABASE_ROOT_PASSWORD}'
+      MYSQL_USER: '${DATABASE_USER}'
+      MYSQL_PASSWORD: '${DATABASE_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - erasysdbdata:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./database/sqldump.sql:/docker-entrypoint-initdb.d/sqldump.sql
+    networks:
+      - erasys-app-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+    env_file: .env
+  phpmyadmin:
+    container_name: erasys-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db:db
+    ports:
+      - 8080:80
+    environment:
+      MYSQL_USERNAME: '${DATABASE_USER}'
+      MYSQL_ROOT_PASSWORD: '${DATABASE_ROOT_PASSWORD}'
+      PMA_HOST: db
+    env_file: .env
+    networks:
+      - erasys-app-network
+  compromised-pw-api:
+    container_name: erasys-compromised-pw-api
+    image: erasys/compromised-pw-api:latest
+    ports:
+      - 5001:5000
+    networks:
+      - erasys-app-network
+
+#Docker Networks
+networks:
+  erasys-app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  erasysdbdata:
+    driver: local
