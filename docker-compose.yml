@@ -1,13 +1,13 @@
 version: "3.8"
 services:
-  api:
+  erasys-api:
     container_name: erasys-api
     build:
       dockerfile: docker/Dockerfile
       context: ./
     working_dir: /usr/src/app
     depends_on:
-      - db
+      - erasys-db
     environment:
       NODE_ENV: development
       PORT: ${PORT}
@@ -20,7 +20,7 @@ services:
     env_file: .env
     networks:
       - erasys-app-network
-  db:
+  erasys-db:
     #image: mysql:8.0.19
     image: mariadb:10
     container_name: erasys-db
@@ -45,13 +45,13 @@ services:
     container_name: erasys-phpmyadmin
     image: phpmyadmin/phpmyadmin
     links:
-      - db:db
+      - erasys-db:erasys-db
     ports:
       - 8080:80
     environment:
       MYSQL_USERNAME: '${DATABASE_USER}'
       MYSQL_ROOT_PASSWORD: '${DATABASE_ROOT_PASSWORD}'
-      PMA_HOST: db
+      PMA_HOST: erasys-db
     env_file: .env
     networks:
       - erasys-app-network
