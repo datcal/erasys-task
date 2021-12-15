@@ -25,7 +25,6 @@ async function bootstrap() {
     case 'full-check-passwords':
       await cliHelperService.checkValidationAndCompromised();
       break;
-      break;
     default:
       console.log('Command not found');
       process.exit(1);
