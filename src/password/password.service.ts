@@ -25,12 +25,13 @@ export class PasswordService {
 
   getMatch(s: string): string[] {
     const errors = [];
-    this.pattern.forEach((pattern: RegExp, index) => {
-      const regex = new RegExp(pattern);
+
+    for (const [index, value] of this.pattern.entries()) {
+      const regex = new RegExp(value);
       if (regex.test(s) === this.match[index]) {
         errors.push(this.message[index]);
       }
-    });
+    }
 
     return errors;
   }
