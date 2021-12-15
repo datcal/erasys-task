@@ -16,13 +16,12 @@ Set up
 First, build docker container and run:
 
 ```bash
-docker-compose build
-docker-compose up -d
+docker-compose build && docker-compose up -d
 ```
 
 Configuring Database
 ------
-You can set database configurations, use the following values in .env which lives root directory.
+You can set database configurations, use the following values in .env which lives in the root directory.
 
 ```
 DATABASE_CLIENT=mysql
@@ -38,8 +37,7 @@ Running The Test
 ------
 
 ```bash
-- npm run test:e2e
-- npm test
+- docker exec -it erasys-api npm run test:e2e
 ```
 
 Validate Passwords
