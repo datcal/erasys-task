@@ -9,7 +9,7 @@ export class CliHelperService {
     private readonly cliHelperRepository: CliHelperRepository,
   ) {}
 
-  /* Check if the password is valid */
+  /* Check if the password is valid or not */
   async checkValidation() {
     const validPasswords = [];
     const inValidPasswords = [];
@@ -35,7 +35,7 @@ export class CliHelperService {
     await this.cliHelperRepository.updatePassword(inValidPasswords, 0);
   }
 
-  /* Check if the password is valid */
+  /* Check if the password is compromised or not */
   async checkCompromised() {
     const passwords = await this.cliHelperRepository.getPasswords();
 
@@ -52,7 +52,7 @@ export class CliHelperService {
     await Promise.all(promises);
   }
 
-  /* Check if the password is valid */
+  /* Check if the password is compromised/valid or not */
   async checkValidationAndCompromised() {
     const validPasswords = [];
     const inValidPasswords = [];

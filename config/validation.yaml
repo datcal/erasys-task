@@ -9,7 +9,7 @@ match:
   - false
   - false
 message:
-  - minimum 5 character
-  - three or more repeating consecutive characters  
-  - you have to use at least one upper-case character or one special character 
-  - minimum 1 number
+  - The password contains minimum 5 characters.
+  - The password cannot contain three or more repeating consecutive characters.
+  - You have to use at least one upper-case character or one special character.
+  - The password contains minimum 1 number.

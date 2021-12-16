@@ -10,13 +10,14 @@ export class PasswordService {
     this.loadValidations();
   }
 
+  /* Load the validations from the config file */
   loadValidations() {
     this.pattern = this.configService.get('pattern');
     this.match = this.configService.get('match');
     this.message = this.configService.get('message');
-    // Logger.log(this.pattern);
   }
 
+  /* Check if the password is valid or not */
   check(password: string) {
     const error = this.getMatch(password);
     const status = error.length > 0 ? 1 : 0;
