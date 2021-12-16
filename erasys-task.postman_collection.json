@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "a81b14b6-d912-488c-84e9-1ddf64048b02",
+		"name": "erasys-task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 the password is valid\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Status code is 400 the password is invalid\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "password",
+							"value": "''s",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}:3000/passwords",
+					"host": [
+						"{{url}}"
+					],
+					"port": "3000",
+					"path": [
+						"passwords"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "compromise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 the password is compromise\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204 the password isn't compromise\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{url}}:5001/compromised?password=%23nxzr1Bp",
+					"host": [
+						"{{url}}"
+					],
+					"port": "5001",
+					"path": [
+						"compromised"
+					],
+					"query": [
+						{
+							"key": "password",
+							"value": "%23nxzr1Bp"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost"
+		}
+	]
+}
