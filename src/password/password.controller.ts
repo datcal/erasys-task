@@ -1,4 +1,5 @@
 import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { PasswordService } from './password.service';
 
 @Controller('passwords')
@@ -6,8 +7,9 @@ export class PasswordController {
   constructor(private readonly passwordService: PasswordService) {}
 
   @Post()
-  check(@Res() response, @Body('password') password: string): void {
-    const [status, error] = this.passwordService.check(password);
+  check(@Res() response: Response, @Body('password') password: string) {
+    const [status, error]: Array<number | string[]> =
+      this.passwordService.check(password);
     if (status) {
       response.status(400).json(error);
     } else {

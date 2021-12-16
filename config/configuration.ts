@@ -1,4 +1,4 @@
-export default () => ({
+const configuration = () => ({
   database: {
     client: process.env.DATABASE_CLIENT || 'mysql',
     host: process.env.DATABASE_HOST,
@@ -17,3 +17,5 @@ export default () => ({
     port: Number.parseInt(process.env.PORT, 10) || 3000,
   },
 });
+
+export default configuration;

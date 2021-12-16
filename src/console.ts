@@ -1,3 +1,4 @@
+import { exit } from 'node:process';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CliHelperService } from './cli-helper/cli-helper.service';
@@ -27,11 +28,11 @@ async function bootstrap() {
       break;
     default:
       console.log('Command not found');
-      process.exit(1);
+      exit(1);
   }
 
   await app.close();
-  process.exit(0);
+  exit(0);
 }
 
-bootstrap();
+bootstrap().then(console.log).catch(console.error);

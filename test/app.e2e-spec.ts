@@ -8,7 +8,7 @@ import validation from '../config/validation';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let httpServer: any;
+  let httpServer: unknown;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

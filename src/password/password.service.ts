@@ -24,7 +24,7 @@ export class PasswordService {
   }
 
   getMatch(s: string): string[] {
-    const errors = [];
+    const errors: string[] = [];
 
     for (const [index, value] of this.pattern.entries()) {
       const regex = new RegExp(value);

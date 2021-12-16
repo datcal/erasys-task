@@ -60,7 +60,7 @@ export class CliHelperService {
 
     this.log('Checking passwords...');
     const promises = passwords.map(async (p) => {
-      const [statusValidation, messageValidation] =
+      const [statusValidation, messageValidation]: [number, string | string[]] =
         await this.cliHelperRepository.checkFromPasswordValidationApi(
           p.password,
         );
